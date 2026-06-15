@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const JavaScriptObfuscator = require('javascript-obfuscator');
 
-// HTML Ka Base Template
+// 1. Base HTML Template (Interface aesthetics)
 const htmlTemplate = `
 <!DOCTYPE html>
 <html lang="en">
@@ -11,9 +11,28 @@ const htmlTemplate = `
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web 2 - Security Logic</title>
     <style>
-        body { margin: 0; padding: 0; background-color: #000; color: #fff; font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .king-text { font-size: 3rem; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; }
-        .error { color: #ff4d4d; font-size: 1.5rem; }
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background-color: #000; 
+            color: #fff; 
+            font-family: 'Arial', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
+        .king-text { 
+            font-size: 3rem; 
+            font-weight: bold; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+        }
+        .error { 
+            color: #ff4d4d; 
+            font-size: 1.5rem; 
+        }
     </style>
 </head>
 <body>
@@ -23,23 +42,29 @@ const htmlTemplate = `
 </html>
 `;
 
-// Raw JavaScript Logic Jo Chhupani Hai
+// 2. JavaScript Security Logic Generator
 function generateJS(startsWith, targetLink) {
     return `
         (function() {
             const targetIDLink = "${targetLink}";
+            
             function getQueryParam(param) {
                 const urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get(param);
             }
+            
             function validateAPI(api) {
-                if (!api || api.length !== 10) return false;
+                if (!api) return false;
+                if (api.length !== 10) return false;
                 if (!api.startsWith('${startsWith}')) return false;
+                
                 const pattern = /^(mt|tm|zf|mh|az|5|12|14|72|786)+$/;
                 return pattern.test(api);
             }
+            
             const userAPI = getQueryParam('api');
             const statusDiv = document.getElementById('status');
+            
             if (validateAPI(userAPI)) {
                 statusDiv.textContent = "MUHAMMAD TAQI KING";
                 statusDiv.className = "king-text";
@@ -54,27 +79,51 @@ function generateJS(startsWith, targetLink) {
     `;
 }
 
-// Data read karke obfuscated HTML files generate karna
-const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'data.json'), 'utf8'));
-
-// 'dist' folder jahan public files jayengi
-if (!fs.existsSync('./dist')) fs.mkdirSync('./dist');
-
-data.forEach(item => {
-    const rawJS = generateJS(item.startsWith, item.target);
+// 3. Automation Core Logic
+try {
+    // Data read karna
+    const dataPath = path.join(__dirname, 'data.json');
+    if (!fs.existsSync(dataPath)) {
+        console.error("Error: data.json file nahi mili!");
+        process.exit(1);
+    }
     
-    // JS ko encrypt/obfuscate karna taake koi parh na sake
-    const obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS, {
-        compact: true,
-        controlFlowFlattening: true,
-        stringArray: true,
-        stringArrayThreshold: 1.0
-    }).getObfuscatedCode();
-
-    // Template mein fit karna
-    const finalHTML = htmlTemplate.replace('js_placeholder', obfuscatedJS);
+    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
     
-    // File save karna
-    fs.writeFileSync(path.join('./dist', item.outputFile), finalHTML);
-    console.log(\`Generated obfuscated file: \${item.outputFile}\`);
-});
+    // Output 'dist' directory create karna agar nahi bani hui
+    const distPath = path.join(__dirname, 'dist');
+    if (!fs.existsSync(distPath)) {
+        fs.mkdirSync(distPath);
+    }
+    
+    // Har ek item ke liye file loop chalana
+    data.forEach(item => {
+        const rawJS = generateJS(item.startsWith, item.target);
+        
+        // High-level Obfuscation Configurations (Script Chhupane ke liye)
+        const obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS, {
+            compact: true,
+            controlFlowFlattening: true,
+            controlFlowFlatteningThreshold: 1.0,
+            deadCodeInjection: true,
+            deadCodeInjectionThreshold: 0.4,
+            stringArray: true,
+            stringArrayThreshold: 1.0,
+            stringArrayEncoding: ['rc4', 'base64'],
+            splitStrings: true,
+            unicodeEscapeSequence: true
+        }).getObfuscatedCode();
+        
+        // Obfuscated code ko HTML template mein inject karna
+        const finalHTML = htmlTemplate.replace('js_placeholder', obfuscatedJS);
+        
+        // File write/save karna dist folder mein
+        fs.writeFileSync(path.join(distPath, item.outputFile), finalHTML);
+        console.log(\`Successfully generated secure file: \${item.outputFile}\`);
+    });
+    
+    console.log("All files compiled and obfuscated successfully!");
+} catch (error) {
+    console.error("Compilation failed with error: ", error);
+    process.exit(1);
+}
