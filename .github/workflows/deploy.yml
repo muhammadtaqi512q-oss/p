@@ -3,12 +3,17 @@ name: Secure Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Jab aap code push karenge tab chalega
+      - main
 
+# GitHub Actions ko permissions dena taake page publish ho sake
 permissions:
   contents: write
   pages: write
   id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
@@ -22,16 +27,25 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Obfuscator
-        run: npm install javascript-obfuscator
+      # Compiler aur Obfuscator dependencies install karna
+      - name: Initialize NPM and Install Obfuscator
+        run: |
+          npm init -y
+          npm install javascript-obfuscator
 
+      # compile.js script run karke files generate karna
       - name: Run Compiler Script
         run: node compile.js
 
-      - name: Upload Artifact
+      - name: Setup Pages Configuration
+        uses: actions/configure-pages@v4
+
+      # Sirf 'dist' folder ko server par bhejna (taki raw compile.js aur data.json chhup sakein)
+      - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist  # Sirf obfuscated HTML files deploy hongi
+          path: ./dist
 
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
