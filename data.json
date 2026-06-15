@@ -1,17 +1,32 @@
 [
   {
-    "startsWith": "tm",
-    "target": "https://muhammadtaqi512q-oss.github.io/MASTER-AI-2/3tm",
+    "startsWith": "mt",
+    "target": "https://muhammadtaqi512q-oss.github.io/puzzle/web-builder",
     "outputFile": "index.html"
   },
   {
     "startsWith": "zf",
     "target": "https://muhammadtaqi512q-oss.github.io/MASTER-AI-2/5L",
-    "outputFile": "page2.html"
+    "outputFile": "lumina.html"
   },
   {
     "startsWith": "mh",
     "target": "https://muhammadtaqi512q-oss.github.io/MASTER-AI-2/kraken",
-    "outputFile": "page3.html"
+    "outputFile": "kraken.html"
+  },
+  {
+    "startsWith": "tm",
+    "target": "https://muhammadtaqi512q-oss.github.io/MASTER-AI-2/3tm",
+    "outputFile": "version1.html"
+  },
+  {
+    "startsWith": "mt",
+    "target": "https://muhammadtaqi512q-oss.github.io/MASTER-AI-2/1",
+    "outputFile": "web2.html"
+  },
+  {
+    "startsWith": "mt",
+    "target": "https://muhammadtaqi512q-oss.github.io/MASTER-AI-2/4",
+    "outputFile": "web3.html"
   }
 ]
