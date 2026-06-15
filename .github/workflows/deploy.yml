@@ -1,0 +1,37 @@
+name: Secure Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Jab aap code push karenge tab chalega
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Obfuscator
+        run: npm install javascript-obfuscator
+
+      - name: Run Compiler Script
+        run: node compile.js
+
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist  # Sirf obfuscated HTML files deploy hongi
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
