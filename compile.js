@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const JavaScriptObfuscator = require('javascript-obfuscator');
 
-// 1. Base HTML Template (Interface aesthetics)
+// 1. Base HTML Template
 const htmlTemplate = `
 <!DOCTYPE html>
 <html lang="en">
@@ -81,7 +81,6 @@ function generateJS(startsWith, targetLink) {
 
 // 3. Automation Core Logic
 try {
-    // Data read karna
     const dataPath = path.join(__dirname, 'data.json');
     if (!fs.existsSync(dataPath)) {
         console.error("Error: data.json file nahi mili!");
@@ -89,18 +88,16 @@ try {
     }
     
     const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-    
-    // Output 'dist' directory create karna agar nahi bani hui
     const distPath = path.join(__dirname, 'dist');
+    
     if (!fs.existsSync(distPath)) {
         fs.mkdirSync(distPath);
     }
     
-    // Har ek item ke liye file loop chalana
     data.forEach(item => {
         const rawJS = generateJS(item.startsWith, item.target);
         
-        // High-level Obfuscation Configurations (Script Chhupane ke liye)
+        // High-level Obfuscation Configurations
         const obfuscatedJS = JavaScriptObfuscator.obfuscate(rawJS, {
             compact: true,
             controlFlowFlattening: true,
@@ -114,12 +111,10 @@ try {
             unicodeEscapeSequence: true
         }).getObfuscatedCode();
         
-        // Obfuscated code ko HTML template mein inject karna
         const finalHTML = htmlTemplate.replace('js_placeholder', obfuscatedJS);
         
-        // File write/save karna dist folder mein
         fs.writeFileSync(path.join(distPath, item.outputFile), finalHTML);
-        console.log(\`Successfully generated secure file: \${item.outputFile}\`);
+        console.log("Successfully generated secure file: " + item.outputFile);
     });
     
     console.log("All files compiled and obfuscated successfully!");
