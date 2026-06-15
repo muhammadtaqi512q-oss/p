@@ -1,0 +1,17 @@
+[
+  {
+    "startsWith": "tm",
+    "target": "https://muhammadtaqi512q-oss.github.io/MASTER-AI-2/3tm",
+    "outputFile": "page1.html"
+  },
+  {
+    "startsWith": "zf",
+    "target": "https://muhammadtaqi512q-oss.github.io/MASTER-AI-2/5L",
+    "outputFile": "page2.html"
+  },
+  {
+    "startsWith": "mh",
+    "target": "https://muhammadtaqi512q-oss.github.io/MASTER-AI-2/kraken",
+    "outputFile": "page3.html"
+  }
+]
