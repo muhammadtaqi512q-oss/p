@@ -28,5 +28,10 @@
     "startsWith": "mt",
     "target": "https://muhammadtaqi512q-oss.github.io/MASTER-AI-2/4",
     "outputFile": "web3.html"
+  },
+   {
+    "startsWith": "@&",
+    "target": "https://p-m-t-1.oneapp.dev/",
+    "outputFile": "master.html"
   }
 ]
