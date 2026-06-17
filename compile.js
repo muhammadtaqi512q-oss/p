@@ -58,7 +58,7 @@ function generateJS(startsWith, targetLink) {
                 if (api.length !== 10) return false;
                 if (!api.startsWith('${startsWith}')) return false;
                 
-                const pattern = /^(mt|tm|zf|mh|az|5|12|14|72|786)+$/;
+                const pattern = /^(mt|tm|zf|mh|az|5|12|14|72|@|$|#|&|786)+$/;
                 return pattern.test(api);
             }
             
