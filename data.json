@@ -30,7 +30,7 @@
     "outputFile": "web3.html"
   },
    {
-    "startsWith": "@&",
+    "startsWith": "@@",
     "target": "https://p-m-t-1.oneapp.dev/",
     "outputFile": "master.html"
   }
